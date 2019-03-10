@@ -1,8 +1,6 @@
 yii2-images
 ===========
-clining for car brands storing
-==========
-Guys, we definetly need to do something with this repo. I see several ways:
+cloning for car brands storing
 <ul>
 <li>to write tests</li>
 <li>to find active contributers</li>
