@@ -49,11 +49,33 @@ class ImageBehave extends Behavior
             throw new \Exception('Owner must have primaryKey when you attach image!');
         }
 
-        $pictureFileName =
-            substr(md5(microtime(true) . $absolutePath), 4, 6)
-            . '.' .
-            pathinfo($absolutePath, PATHINFO_EXTENSION);
-        $pictureSubDir = $this->getModule()->getModelSubDir($this->owner);
+        //csoldier's
+		if($this->owner->carBrand->title != NULL){	
+            //debug($this->owner);die;
+			$carBrandTitle = sanitizeToFolderName($this->owner->carBrand->title);			
+			$pictureFileName =
+				$this->owner->id .'_'. substr(md5(microtime(true) . $absolutePath), 2, 4)
+				. '.' .
+				pathinfo($absolutePath, PATHINFO_EXTENSION);
+			$pictureSubDir = $carBrandTitle;
+			
+			if($this->owner->carModel->title != NULL){
+				$carModelTitle = sanitizeToFolderName($this->owner->carModel->title);
+				$pictureSubDir = $pictureSubDir . '/' . $carModelTitle;		
+
+				if($this->owner->carGeneration->title != NULL){
+					$carGenerationTitle = sanitizeToFolderName($this->owner->carGeneration->title);
+					$pictureSubDir = $pictureSubDir . '/' . $carGenerationTitle;		
+				}
+			}			
+		} else {
+			$pictureFileName =
+				substr(md5(microtime(true) . $absolutePath), 4, 6)
+				. '.' .
+				pathinfo($absolutePath, PATHINFO_EXTENSION);
+			$pictureSubDir = $this->getModule()->getModelSubDir($this->owner);
+			
+		}
         $storePath = $this->getModule()->getStorePath($this->owner);
 
         $newAbsolutePath = $storePath .
