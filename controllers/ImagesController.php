@@ -51,9 +51,12 @@ class ImagesController extends Controller
             throw new \yii\web\HttpException(404, 'Image not found (extension)');
         }
 
-        if($image){
-            header('Content-Type: ' . $image->getMimeType($size) );
-            echo $image->getContent($size);
+       if($image){
+            $response = \Yii::$app->response;
+            $response->format = yii\web\Response::FORMAT_RAW;
+            $response->headers->add('Content-Type', $image->getMimeType($size));
+            $response->data = $image->getContent($size);
+            return $response;
         }else{
             throw new \yii\web\HttpException(404, 'There is no images');
         }
